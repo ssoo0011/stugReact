@@ -1,0 +1,19 @@
+@font-face {
+    font-family: 'SeoulAlrim-Bold';
+    src: url('/assets/font/seoul-alrim/SeoulAlrim-Bold.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'SeoulAlrim-ExtraBold';
+    src: url('/assets/font/seoul-alrim/SeoulAlrim-ExtraBold.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'SeoulAlrim-Heavy';
+    src: url('/assets/font/seoul-alrim/SeoulAlrim-Heavy.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'SeoulAlrim-Medium';
+    src: url('/assets/font/seoul-alrim/SeoulAlrim-Medium.otf') format('opentype');
+}

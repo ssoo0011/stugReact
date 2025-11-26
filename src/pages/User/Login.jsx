@@ -1,10 +1,76 @@
+import {useState} from "react";
+import {showAlert} from "../../utils/common.js";
+import api from "../../services/apiClient.js";
+
+
 export default function Login() {
+
+    const [loginInfo, setLoginInfo] = useState({
+        id: '',
+        password: ''
+    })
+    const onChange = (e) => {
+        const {name, value} = e.target;
+        setLoginInfo((prev) => ({...prev, [name]: value}));
+    };
+
+    const login = async () => {
+        try {
+            const data = {
+                id: loginInfo.id,
+                password: loginInfo.password
+            }
+
+            const res = await api.post('/api/auth/login', data, {
+                headers: { "Content-Type": "application/json" }
+            });
+            console.log(res)
+
+            if (res.data.code === 'SUCCESS') {
+                window.location.href = '/home';
+            } else {
+                showAlert('loginAlert', res.data.message, 'danger');
+            }
+
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     return (
-        <div className="container mt-4" style={{maxWidth: 420}}>
-            <h2>Login</h2>
-            <input className="form-control mb-2" placeholder="아이디" />
-            <input className="form-control mb-3" type="password" placeholder="비밀번호" />
-            <button className="btn btn-primary w-100">로그인</button>
-        </div>
+        <>
+            <main className="container content-space-t-4">
+                <div className="offset-3 col-lg-6 mt-10">
+                    <div className="card card-shadow card-login">
+                        <form id="form">
+                            <div className="card-body">
+                                <h2>LogIn</h2>
+                                <input className="form-control mb-2 mt-3" placeholder="아이디"
+                                       name="id" value={loginInfo.id} onChange={onChange}
+                                />
+                                <input className="form-control mb-3" type="password" placeholder="비밀번호"
+                                       name="password" value={loginInfo.password} onChange={onChange}
+                                />
+                                <button type="button" className="btn btn-primary w-100" onClick={login}>로그인</button>
+                                <div className="mt-3">
+                                    <p className="card-text text-muted">
+                                        비밀번호를 잊어버렸나요? <a className="link">비밀번호 찾기</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </main>
+            <div id="loginAlert" role="alert">
+                <div className="d-flex">
+                    <div className="flex-shrink-0">
+                        <i className="alert-icon bi"></i>
+                    </div>
+                    <div className="flex-grow-1 ms-2 alert-text">
+                    </div>
+                </div>
+            </div>
+        </>
     );
 }
