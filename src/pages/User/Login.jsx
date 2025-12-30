@@ -1,6 +1,5 @@
 import {useState} from "react";
-import {showAlert} from "../../utils/common.js";
-import api from "../../services/apiClient.js";
+import useLogin from "../../hooks/auth/login.js"
 
 
 export default function Login() {
@@ -13,29 +12,6 @@ export default function Login() {
         const {name, value} = e.target;
         setLoginInfo((prev) => ({...prev, [name]: value}));
     };
-
-    const login = async () => {
-        try {
-            const data = {
-                id: loginInfo.id,
-                password: loginInfo.password
-            }
-
-            const res = await api.post('/api/auth/login', data, {
-                headers: { "Content-Type": "application/json" }
-            });
-            console.log(res)
-
-            if (res.data.code === 'SUCCESS') {
-                window.location.href = '/home';
-            } else {
-                showAlert('loginAlert', res.data.message, 'danger');
-            }
-
-        } catch (e) {
-            console.log(e)
-        }
-    }
 
     return (
         <>
@@ -51,7 +27,7 @@ export default function Login() {
                                 <input className="form-control mb-3" type="password" placeholder="비밀번호"
                                        name="password" value={loginInfo.password} onChange={onChange}
                                 />
-                                <button type="button" className="btn btn-primary w-100" onClick={login}>로그인</button>
+                                <button type="button" className="btn btn-primary w-100" onClick={useLogin(loginInfo.id, loginInfo.password)}>로그인</button>
                                 <div className="mt-3">
                                     <p className="card-text text-muted">
                                         비밀번호를 잊어버렸나요? <a className="link">비밀번호 찾기</a>

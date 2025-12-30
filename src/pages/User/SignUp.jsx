@@ -1,4 +1,4 @@
-import Header from "../../components/layout/Header";
+import Header from "../../components/layout/header/Header.jsx";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {postApi, showAlert} from "../../utils/common.js";
