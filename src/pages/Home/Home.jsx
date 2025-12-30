@@ -23,23 +23,70 @@ export default function App() {
                 </div>
 
                 {/* section 2.금주 인기*/}
-                <div className="col-lg-4">
-
-                    <div className="container content-space-2 content-space-lg-1">
-                        <div className="mx-lg-auto">
-                            <h3>🔥 이번주 인기 그룹</h3>
-                        </div>
-
-                        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3">
+                <div className="container content-space-t-3 content-space-t-lg-2 mt-5">
+                    <div className="mx-lg-auto">
+                        <h3>🔥 이번주 인기 그룹</h3>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-6 col-md-4 mb-5 mb-md-0">
                             <div className="card card-lg card-shadow card-pinned h-100">
                                 <span className="badge bg-dark text-white card-pinned-top-end">자격증</span>
                                 <div className="card-body">
                                     <div className="mb-3">
                                         <h4 className="mb-1">그룹1</h4>
                                         <div className="progress" style={{height: "1.3em"}}>
-                                            <div className="progress-bar" role="progressbar" style={{width: "75%"}}
+                                            <div className="progress-bar" role="progressbar"
+                                                 style={{width: "75%"}}
                                                  aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
                                                 15명 / 20명
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="mb-3">
+                                        <span className="mb-1" style={{fontSize: "1.1em", fontWeight: 'bold'}}>함께 정보처리기사 공부하실 분들을 모집합니다.</span>
+                                    </div>
+                                    <div className="d-flex justify-content-end">
+                                        <a href="#">GO <i className="bi bi-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-sm-6 col-md-4 mb-5 mb-md-0">
+                            <div className="card card-lg card-shadow card-pinned h-100">
+                                <span className="badge bg-warning text-white card-pinned-top-end">취업준비</span>
+                                <div className="card-body">
+                                    <div className="mb-3">
+                                        <h4 className="mb-1">그룹1</h4>
+                                        <div className="progress" style={{height: "1.3em"}}>
+                                            <div className="progress-bar" role="progressbar"
+                                                 style={{width: "46%"}}
+                                                 aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                23명 / 50명
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="mb-3">
+                                        <span className="mb-1" style={{fontSize: "1.1em", fontWeight: 'bold'}}>함께 정보처리기사 공부하실 분들을 모집합니다.</span>
+                                    </div>
+                                    <div className="d-flex justify-content-end">
+                                        <a href="#">GO <i className="bi bi-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-sm-6 col-md-4 mb-5 mb-md-0">
+                            <div className="card card-lg card-shadow card-pinned h-100">
+                                <span className="badge bg-primary text-white card-pinned-top-end">시험</span>
+                                <div className="card-body">
+                                    <div className="mb-3">
+                                        <h4 className="mb-1">그룹1</h4>
+                                        <div className="progress" style={{height: "1.3em"}}>
+                                            <div className="progress-bar" role="progressbar"
+                                                 style={{width: "95%"}}
+                                                 aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                95명 / 100명
                                             </div>
                                         </div>
                                     </div>
@@ -55,42 +102,43 @@ export default function App() {
                     </div>
                 </div>
 
-                    <div className="container content-space-t-2 content-space-t-lg-3">
-                        <div className="row">
-                            <div className="col-sm-6 col-lg mb-5 mb-lg-0">
-                                <div className="text-center">
-                                    <div className="mb-3">
-                                        <i className="bi-phone fs-1 text-dark"></i>
-                                    </div>
 
-                                    <h5>Responsive</h5>
-                                    <span className="d-block">Responsive, and mobile-first project on the web</span>
+                <div className="container content-space-t-2 content-space-t-lg-3">
+                    <div className="row">
+                        <div className="col-sm-6 col-lg mb-5 mb-lg-0">
+                            <div className="text-center">
+                                <div className="mb-3">
+                                    <i className="bi-phone fs-1 text-dark"></i>
                                 </div>
+
+                                <h5>Responsive</h5>
+                                <span className="d-block">Responsive, and mobile-first project on the web</span>
                             </div>
+                        </div>
 
-                            <div className="col-sm-6 col-lg mb-5 mb-lg-0">
-                                <div className="text-center">
-                                    <div className="mb-3">
-                                        <i className="bi-toggles2 fs-1 text-dark"></i>
-                                    </div>
-
-                                    <h5>Customizable</h5>
-                                    <span className="d-block">Components are easily customized</span>
+                        <div className="col-sm-6 col-lg mb-5 mb-lg-0">
+                            <div className="text-center">
+                                <div className="mb-3">
+                                    <i className="bi-toggles2 fs-1 text-dark"></i>
                                 </div>
+
+                                <h5>Customizable</h5>
+                                <span className="d-block">Components are easily customized</span>
                             </div>
+                        </div>
 
-                            <div className="col-sm-6 col-lg mb-5 mb-sm-0">
-                                <div className="text-center">
-                                    <div className="mb-3">
-                                        <i className="bi-file-earmark-text fs-1 text-dark"></i>
-                                    </div>
-
-                                    <h5>Documentation</h5>
-                                    <span className="d-block">Every component and plugin is well documented</span>
+                        <div className="col-sm-6 col-lg mb-5 mb-sm-0">
+                            <div className="text-center">
+                                <div className="mb-3">
+                                    <i className="bi-file-earmark-text fs-1 text-dark"></i>
                                 </div>
-                            </div>
 
-                            <div className="col-sm-6 col-lg">
+                                <h5>Documentation</h5>
+                                <span className="d-block">Every component and plugin is well documented</span>
+                            </div>
+                        </div>
+
+                        <div className="col-sm-6 col-lg">
                                 <div className="text-center">
                                     <div className="mb-3">
                                         <i className="bi-chat-right-dots fs-1 text-dark"></i>

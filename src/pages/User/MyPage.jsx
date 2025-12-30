@@ -1,73 +1,115 @@
 import Header from "../../components/layout/Header";
-import {useEffect, useState} from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {postApi, showAlert, getApi} from "../../utils/common.js";
-import api from "../../services/apiClient.js";
+import AlertBox from "../../components/common/AlertBox";
+import PasswordField from "../../components/common/PasswordField";
+import useMyPageUser from "../../hooks/user/useMyPageUser.js";
+import useChangePassword from "../../hooks/user/useChangePassword.js";
+import ReadOnlyField from "../../components/common/ReadOnlyField";
 
 export default function MyPage() {
 
     const navigate = useNavigate();
-    const [showPw, setShowPw] = useState(false);
-    const [showConfirmPw, setConfirmShowPw] = useState(false);
-    const [user, setUser] = useState({
-        id: "",
-        name: "",
-        email: "",
-    });
+    const { changePassword } = useChangePassword();
+
     const [passwordForm, setPasswordForm] = useState({
         password: "",
         confirmPassword: "",
     });
 
-    useEffect(() => {
-        getApi("/api/user/myPage")
-            .then(res => setUser(res.data))
-            .catch((e) => {
-                console.log(e);
-                navigate("/login")
-            });
+    const [alert, setAlert] = useState({ type: "", message: "" });
+    const [alertVisible, setAlertVisible] = useState(false);
 
-    }, []);
+    const hideTimerRef = useRef(null);     // 몇 초 뒤 숨기기 시작
+    const clearTimerRef = useRef(null);    // fade 끝난 뒤 완전 제거
+
+    const openAlert = (type, message, ms = 3000) => {
+        // 기존 타이머 정리
+        if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+        if (clearTimerRef.current) clearTimeout(clearTimerRef.current);
+
+        // 메시지 세팅 + 즉시 보이기
+        setAlert({ type, message });
+        setAlertVisible(true);
+
+        // ms 후에 fade-out 시작
+        hideTimerRef.current = setTimeout(() => {
+            setAlertVisible(false);
+
+            // 부트스트랩 fade 시간(기본 150ms) 조금 여유 줘서 완전 제거
+            clearTimerRef.current = setTimeout(() => {
+                setAlert({ type: "", message: "" });
+                hideTimerRef.current = null;
+                clearTimerRef.current = null;
+            }, 2500);
+        }, ms);
+    };
+
+    const closeAlert = () => {
+        if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+        if (clearTimerRef.current) clearTimeout(clearTimerRef.current);
+
+        // fade-out 시작
+        setAlertVisible(false);
+
+        // fade 끝나면 제거
+        clearTimerRef.current = setTimeout(() => {
+            setAlert({ type: "", message: "" });
+            hideTimerRef.current = null;
+            clearTimerRef.current = null;
+        }, 2500);
+    };
+
+    const { user, loading } = useMyPageUser(navigate);
 
     const onChange = (e) => {
         const { name, value } = e.target;
         setPasswordForm((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = async () => {
+    useEffect(() => {
+        return () => {
+            if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+            if (clearTimerRef.current) clearTimeout(clearTimerRef.current);
+        };
+    }, []);
 
+    const handleSubmit = async () => {
         if (passwordForm.password !== passwordForm.confirmPassword) {
-            showAlert('signUpAlert', '비밀번호와 비밀번호 확인이 일치하지 않습니다.', 'danger');
+            openAlert("danger", "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
             return;
         }
 
-        const data = {
-            password: passwordForm.password,
-            confirmPassword: passwordForm.confirmPassword
-        };
         try {
+            const data = await changePassword({
+                password: passwordForm.password,
+                confirmPassword: passwordForm.confirmPassword,
+            });
 
-            const res = await api.post("/api/user/changePw", data);
-
-            switch (res.data.code) {
-                case 'SUCCESS':
-                    showAlert('signUpAlert', res.data.message, 'success');
-                    setTimeout(() => {
-                        navigate("/login");
-                    }, 2000);
+            switch (data.code) {
+                case "SUCCESS":
+                    openAlert("success", data.message);
+                    setTimeout(() => navigate("/login"), 2000);
                     break;
-                case 'PASSWORD_CONFIRM_NOT_MATCHED':
-                    showAlert('signUpAlert', res.data.message, 'danger');
+
+                case "PASSWORD_CONFIRM_NOT_MATCHED":
+                    openAlert("danger", data.message);
+                    break;
+
+                default:
+                    openAlert("danger", data.message || "처리 중 오류가 발생했습니다.");
                     break;
             }
-
         } catch (e) {
-            console.log(e)
+            console.log(e);
+            openAlert("danger", "서버 요청 중 오류가 발생했습니다.");
         }
     };
 
     return (
         <>
+            {loading && <div className="text-center py-4">로딩중...</div>}
+
             <main className="container col-lg-4 content-space-t-3">
                 <div className="row justify-content-lg-between align-items-lg-center">
                     <div className="position-relative">
@@ -79,67 +121,23 @@ export default function MyPage() {
                                             <h3 className="card-title">My Page</h3>
                                         </div>
                                     </div>
-
-                                    <label className="form-label" htmlFor="name">이름</label>
-                                    <div className="mb-4">
-                                        <input type="text" className="form-control"
-                                               name="name" id="name" placeholder="홍길동" value={user.name}
-                                               aria-label="홍길동" readOnly required/>
-                                    </div>
-
-                                    <label className="form-label" htmlFor="name">아이디</label>
-                                    <div className="mb-4 input-group">
-                                        <input type="text" className="form-control"
-                                               name="id" id="id" placeholder="아이디" value={user.id}
-                                               aria-label="아이디" readOnly required/>
-                                    </div>
-
-                                    <div className="mb-4">
-                                        <label className="form-label" htmlFor="signupSrEmail">이메일</label>
-                                        <input type="email" className="form-control"
-                                               name="email" id="email" value={user.email}
-                                               aria-label="email@example.com" readOnly required/>
-                                    </div>
-
-                                    <div className="mb-4">
-                                        <label className="form-label" htmlFor="password">비밀번호</label>
-                                        <div className="input-group">
-                                            {/* 비밀번호 입력 */}
-                                            <input type={showPw ? "text" : "password"}
-                                                   className="form-control"
-                                                   name="password" id="password" value={passwordForm.password}
-                                                   onChange={onChange}
-                                                   placeholder="8자리 이상 비밀번호" aria-label="8자리 이상 비밀번호" required
-                                                   minLength={1}
-                                            />
-                                            <button type="button" className="input-group-append btn btn-light"
-                                                    onClick={() => setShowPw((prev) => !prev)}
-                                            >
-                                                <i className={showPw ? "bi bi-eye-slash" : "bi bi-eye"}/>
-                                            </button>
-                                            <span className="invalid-feedback">비밀번호를 확인해주세요.</span>
-                                        </div>
-                                    </div>
-
-                                    <div className="mb-4">
-                                        <label className="form-label" htmlFor="confirmPassword">비밀번호 확인</label>
-                                        <div className="input-group">
-                                            {/* 비밀번호 입력 */}
-                                            <input type={showConfirmPw ? "text" : "password"}
-                                                   className="form-control"
-                                                   name="confirmPassword" id="confirmPassword"
-                                                   value={passwordForm.confirmPassword} onChange={onChange}
-                                                   placeholder="8자리 이상 비밀번호" aria-label="8자리 이상 비밀번호" required
-                                                   minLength={1}
-                                            />
-                                            <button type="button" className="input-group-append btn btn-light"
-                                                    onClick={() => setConfirmShowPw((prev) => !prev)}  >
-                                                <i className={showConfirmPw ? "bi bi-eye-slash" : "bi bi-eye"}/>
-                                            </button>
-                                            <span className="invalid-feedback">비밀번호를 확인해주세요.</span>
-                                        </div>
-                                    </div>
-
+                                    <ReadOnlyField label="이름" id="name" name="name" value={user.name} placeholder="홍길동" />
+                                    <ReadOnlyField label="아이디" id="id" name="id" value={user.id} placeholder="아이디" />
+                                    <ReadOnlyField label="이메일" id="email" name="email" value={user.email} type="email" />
+                                    <PasswordField
+                                        label="비밀번호"
+                                        name="password"
+                                        id="password"
+                                        value={passwordForm.password}
+                                        onChange={onChange}
+                                    />
+                                    <PasswordField
+                                        label="비밀번호 확인"
+                                        name="confirmPassword"
+                                        id="confirmPassword"
+                                        value={passwordForm.confirmPassword}
+                                        onChange={onChange}
+                                    />
                                     <div className="d-grid gap-4">
                                         <button type="button" className="btn btn-primary btn" onClick={handleSubmit}>수정</button>
                                     </div>
@@ -149,15 +147,12 @@ export default function MyPage() {
                     </div>
                 </div>
             </main>
-            <div id="signUpAlert" role="alert">
-                <div className="d-flex">
-                    <div className="flex-shrink-0">
-                        <i className="alert-icon bi"></i>
-                    </div>
-                    <div className="flex-grow-1 ms-2 alert-text">
-                    </div>
-                </div>
-            </div>
+            <AlertBox
+                type={alert.type}
+                message={alert.message}
+                visible={alertVisible}
+                onClose={closeAlert}
+            />
         </>
     );
 }
