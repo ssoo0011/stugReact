@@ -8,7 +8,7 @@ export default function useLogin(id, password) {
     const navigate = useNavigate();
     const { openAlert } = useAlert();
 
-    const login = async () => {
+    const login = async (id, password) => {
         try {
             const data = { id, password };
 
@@ -18,7 +18,10 @@ export default function useLogin(id, password) {
 
             if (res.data.code === "SUCCESS") {
                 setIsAuth(true);
-                navigate("/home");
+                const params = new URLSearchParams(window.location.search);
+                const redirectUrl = params.get('redirect') || '/'; // 없으면 메인으로
+
+                window.location.href = redirectUrl;
             } else {
                 openAlert("danger", res.data.message || "로그인 실패");
             }

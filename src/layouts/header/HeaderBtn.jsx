@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import useLogout from "../../../hooks/auth/logout.js";
+import useLogout from "../../hooks/auth/logout.js";
 
 export default function HeaderBtn({ isAuth = false }) {
     const navigate = useNavigate();

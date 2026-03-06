@@ -11,7 +11,6 @@ export function AuthProvider({ children }) {
         const checkAuth = async () => {
             try {
                 const result = await api.get("/api/auth/isLogin");
-                console.log(result.data)
                 // 서버 응답에 따라 true/false 판별
                 setIsAuth(result.data.isAuth === true);
             } catch (e){

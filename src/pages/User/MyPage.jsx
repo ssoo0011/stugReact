@@ -1,4 +1,3 @@
-import Header from "../../components/layout/header/Header.jsx";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -76,6 +75,7 @@ export default function MyPage() {
 
                                     <ReadOnlyField label="이름" id="name" name="name" value={user.name} placeholder="홍길동" />
                                     <ReadOnlyField label="아이디" id="id" name="id" value={user.id} placeholder="아이디" />
+                                    <ReadOnlyField label="닉네임" id="nickname" name="nickname" value={user.nickname} placeholder="닉네임" />
                                     <ReadOnlyField label="이메일" id="email" name="email" value={user.email} type="email" />
 
                                     <PasswordField

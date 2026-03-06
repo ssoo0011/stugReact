@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getApi } from "../../utils/common.js";
 
 export default function useMyPageUser(navigate) {
-    const [user, setUser] = useState({ id: "", name: "", email: "" });
+    const [user, setUser] = useState({ id: "", name: "", email: "", nickname: "" });
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {

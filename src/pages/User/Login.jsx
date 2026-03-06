@@ -13,12 +13,18 @@ export default function Login() {
         setLoginInfo((prev) => ({...prev, [name]: value}));
     };
 
+    const login = useLogin(loginInfo.id, loginInfo.password);
+    
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        login(loginInfo.id, loginInfo.password);
+    };
     return (
         <>
-            <main className="container content-space-t-4">
-                <div className="offset-3 col-lg-6 mt-10">
+            <main className="container content-space-t-4 justify-content-center d-flex">
+                <div className="col-lg-6 mt-10">
                     <div className="card card-shadow card-login">
-                        <form id="form">
+                        <form id="form" onSubmit={handleSubmit}>
                             <div className="card-body">
                                 <h2>LogIn</h2>
                                 <input className="form-control mb-2 mt-3" placeholder="아이디"
@@ -27,7 +33,7 @@ export default function Login() {
                                 <input className="form-control mb-3" type="password" placeholder="비밀번호"
                                        name="password" value={loginInfo.password} onChange={onChange}
                                 />
-                                <button type="button" className="btn btn-primary w-100" onClick={useLogin(loginInfo.id, loginInfo.password)}>로그인</button>
+                                <button className="btn btn-primary w-100" type="submit">로그인</button>
                                 <div className="mt-3">
                                     <p className="card-text text-muted">
                                         비밀번호를 잊어버렸나요? <a className="link">비밀번호 찾기</a>

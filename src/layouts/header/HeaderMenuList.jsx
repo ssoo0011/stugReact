@@ -1,9 +1,12 @@
+import {NavLink, useNavigate} from "react-router-dom";
+
 export default function HeaderMenuList({
    title = "",
    items = [{ title: "", link: "" }],
 }) {
 
     if (!title) return null;
+    const navigate = useNavigate();
 
     return (
         <li className="hs-has-mega-menu nav-item">
@@ -16,9 +19,9 @@ export default function HeaderMenuList({
                     <div className="row">
                         <div className="col-sm-12 col-lg-12">
                             {items.map((it, idx) => (
-                                <a key={`${it.link}-${idx}`} className="dropdown-item" href={it.link}>
+                                <NavLink to={it.link} key={`${it.link}-${idx}`} className="dropdown-item" onClick={ () => navigate(it.link)}>
                                     {it.title}
-                                </a>
+                                </NavLink >
                             ))}
                         </div>
                     </div>

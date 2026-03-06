@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {useLocation} from "react-router-dom";
-import {useAuth} from "../../../context/auth/AuthContext.jsx";
+import {useAuth} from "../../context/auth/AuthContext.jsx";
 import HeaderMenuList from "./HeaderMenuList.jsx";
 import HeaderBtn from "./HeaderBtn.jsx";
 
@@ -10,10 +10,10 @@ export default function Header() {
     const [menu1, setMenu1] = useState({
         title: '모임',
         items: [
-            {title: '스터디', link: '#'},
-            {title: '대외활동', link: '#'},
-            {title: '동아리', link: '#'},
-            {title: '친목', link: '#'}
+            {title: '스터디', link: '/group/study/list'},
+            {title: '대외활동', link: '/group/activity/list'},
+            {title: '동아리', link: '/group/club/list'},
+            {title: '친목', link: '/group/friendship/list'}
         ]
     });
     const [menu2, setMenu2] = useState({
@@ -67,7 +67,7 @@ export default function Header() {
                 <div className="container">
                     <nav className="js-mega-menu navbar-nav-wrap">
                         <a className="navbar-brand" href="/home" aria-label="Unify">
-                            <img className="navbar-brand-logo" src="./assets/svg/logos/logo.svg" alt="Image Description"/>
+                            <img className="navbar-brand-logo" src="/assets/svg/logos/logo.svg" alt="Image Description"/>
                         </a>
                         <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
                             data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"

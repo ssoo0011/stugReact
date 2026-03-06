@@ -18,3 +18,9 @@
     font-size: 18px;
     cursor: pointer;
 }
+
+.a-go:hover {
+    font-weight: bold;
+    color: #007bff;
+    filter: brightness(0.8);
+}

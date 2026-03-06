@@ -1,4 +1,4 @@
-import Header from "../../components/layout/header/Header.jsx";
+import Header from "../../layouts/header/Header.jsx";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {postApi, showAlert} from "../../utils/common.js";
@@ -12,6 +12,7 @@ export default function Login() {
         email: "",
         id: "",
         name: "",
+        nickname: "",
         password: "",
         confirmPassword: "",
     });
@@ -22,7 +23,7 @@ export default function Login() {
         setForm((prev) => ({ ...prev, [name]: value }));
     };
 
-    const duplicateApi = async () => {
+    const duplicateIdApi = async () => {
         setAlertMsg('');
         if (form.id == null || form.id.length === 0) {
             showAlert('signUpAlert', '아이디를 입력해 주세요.', 'danger');
@@ -40,6 +41,33 @@ export default function Login() {
                     showAlert('signUpAlert', res.data.message, 'success');
                     break;
                 case 'DUPLICATE_ID':
+                    showAlert('signUpAlert', res.data.message, 'danger');
+                    break;
+            }
+        } catch (e) {
+            console.log(e);
+        }
+
+    }
+
+    const duplicateNicknameApi = async () => {
+        setAlertMsg('');
+        if (form.id == null || form.id.length === 0) {
+            showAlert('signUpAlert', '닉네임을 입력해 주세요.', 'danger');
+            return;
+        }
+
+
+        const id = {id: form.id}
+        try {
+            const res = await postApi("/api/user/duplicate/nickname+", id);
+            setAlertMsg(res.data.message);
+
+            switch (res.data.code) {
+                case 'SUCCESS':
+                    showAlert('signUpAlert', res.data.message, 'success');
+                    break;
+                case 'DUPLICATE_NICKNAME':
                     showAlert('signUpAlert', res.data.message, 'danger');
                     break;
             }
@@ -125,9 +153,21 @@ export default function Login() {
                                                onChange={onChange}
                                                aria-label="아이디" required/>
                                         <button type="button" className="btn btn-primary input-group-append"
-                                                style={{fontSize: "13px"}} onClick={duplicateApi}>중복확인
+                                                style={{fontSize: "13px"}} onClick={duplicateIdApi}>중복확인
                                         </button>
                                         <span className="invalid-feedback">아이디를 입력해 주세요.</span>
+                                    </div>
+
+                                    <label className="form-label" htmlFor="name">닉네임</label>
+                                    <div className="mb-4 input-group">
+                                        <input type="text" className="form-control"
+                                               name="id" id="id" placeholder="닉네임" value={form.nickname}
+                                               onChange={onChange}
+                                               aria-label="닉네임" required/>
+                                        <button type="button" className="btn btn-primary input-group-append"
+                                                style={{fontSize: "13px"}} onClick={duplicateNicknameApi}>중복확인
+                                        </button>
+                                        <span className="invalid-feedback">닉네임을 입력해 주세요.</span>
                                     </div>
 
                                     <div className="mb-4">
@@ -172,7 +212,7 @@ export default function Login() {
                                                    minLength={1}
                                             />
                                             <button type="button" className="input-group-append btn btn-light"
-                                                    onClick={() => setConfirmShowPw((prev) => !prev)}  >
+                                                    onClick={() => setConfirmShowPw((prev) => !prev)}>
                                                 <i className={showConfirmPw ? "bi bi-eye-slash" : "bi bi-eye"}/>
                                             </button>
                                             <span className="invalid-feedback">비밀번호를 확인해주세요.</span>
@@ -180,7 +220,9 @@ export default function Login() {
                                     </div>
 
                                     <div className="d-grid gap-4">
-                                        <button type="submit" className="btn btn-primary btn" onClick={handleSubmit}>회원가입</button>
+                                        <button type="submit" className="btn btn-primary btn"
+                                                onClick={handleSubmit}>회원가입
+                                        </button>
                                         <p className="card-text text-muted">
                                             비밀번호를 잊어버렸나요?
                                             <a className="link" onClick={() => navigate("/login")}>로그인</a>
